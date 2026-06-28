@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Ads Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
+  </head>
+  <body>
+    <!-- ヘッダー -->
+    <header>
+      <h1>📊 Ads Performance Dashboard</h1>
+      <p>Global Ads Performance Data — Google / Meta / TikTok</p>
+    </header>
+
+    <!-- グラフエリア -->
+    <div class="grid">
+      <div class="card">
+        <h2>プラットフォーム別 平均ROAS</h2>
+        <canvas id="roasChart"></canvas>
+      </div>
+      <div class="card">
+        <h2>月別 総広告費トレンド</h2>
+        <canvas id="trendChart"></canvas>
+      </div>
+      <div class="card">
+        <h2>プラットフォーム別 広告費シェア</h2>
+        <canvas id="shareChart"></canvas>
+      </div>
+      <div class="card">
+        <h2>キャンペーンタイプ別 平均ROAS</h2>
+        <canvas id="campaignChart"></canvas>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+/* 全体のリセットと基本設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0f1117;
+  color: #ffffff;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  padding: 24px;
+}
+
+/* ヘッダー */
+header {
+  margin-bottom: 32px;
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+header p {
+  font-size: 14px;
+  color: #888888;
+  margin-top: 4px;
+}
+
+/* グラフを2列に並べるグリッドレイアウト */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* グラフカード */
+.card {
+  background-color: #1e2130;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.card h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #aaaaaa;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
