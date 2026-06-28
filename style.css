@@ -51,3 +51,64 @@ header p {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* KPIカードエリア */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4列 */
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* KPIカード */
+.kpi-card {
+  background-color: #1e2130;
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.kpi-label {
+  font-size: 12px;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ローディング */
+#loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 16px;
+}
+
+/* スピナー */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #4285f4;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite; /* くるくる回転 */
+}
+
+/* 回転アニメーション */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#loading p {
+  font-size: 14px;
+  color: #aaaaaa;
+}
