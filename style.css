@@ -14,6 +14,9 @@ body {
 
 /* ヘッダー */
 header {
+  display: flex;
+  justify-content: space-between; /* 左右に分ける */
+  align-items: center;
   margin-bottom: 32px;
 }
 
@@ -41,6 +44,10 @@ header p {
   background-color: #1e2130;
   border-radius: 12px;
   padding: 24px;
+  overflow: hidden;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .card h2 {
@@ -111,4 +118,200 @@ header p {
 #loading p {
   font-size: 14px;
   color: #aaaaaa;
+}
+/* レスポンシブ対応（画面幅が768px以下の場合） */
+@media (max-width: 768px) {
+  /* グラフを1列に変更 */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* KPIカードを2列に変更 */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* KPIの数字を小さく */
+  .kpi-value {
+    font-size: 20px;
+  }
+
+  /* ヘッダーのタイトルを小さく */
+  header h1 {
+    font-size: 18px;
+  }
+}
+/* フィルターエリア */
+.filter-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+/* フィルターボタン */
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #444444;
+  background-color: transparent;
+  color: #aaaaaa;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s; /* ホバー時のアニメーション */
+}
+
+/* ホバー時 */
+.filter-btn:hover {
+  border-color: #4285f4;
+  color: #ffffff;
+}
+
+/* 選択中のボタン */
+.filter-btn.active {
+  background-color: #4285f4;
+  border-color: #4285f4;
+  color: #ffffff;
+}
+
+/* データテーブルエリア */
+.table-area {
+  margin-top: 24px;
+  margin-bottom: 24px; /* グラフカードとの余白 */
+}
+
+.table-area h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+/* テーブル */
+#summaryTable {
+  width: 100%;
+  border-collapse: collapse; /* セルの境界線を重ねる */
+}
+
+/* ヘッダー行 */
+#summaryTable thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  color: #aaaaaa;
+  border-bottom: 1px solid #2e3347;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* データ行 */
+#summaryTable tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #ffffff;
+  border-bottom: 1px solid #2e3347;
+}
+
+/* ホバー時に行をハイライト */
+#summaryTable tbody tr:hover {
+  background-color: #2e3347;
+}
+
+/* ソート可能なヘッダー */
+#summaryTable thead th {
+  cursor: pointer; /* マウスをのせるとポインターに変わる */
+  user-select: none; /* テキスト選択を無効化 */
+}
+
+#summaryTable thead th:hover {
+  color: #ffffff;
+}
+
+/* ソートの矢印 */
+#summaryTable thead th.asc::after {
+  content: " ↑";
+}
+
+#summaryTable thead th.desc::after {
+  content: " ↓";
+}
+
+/* テーマ切替ボタン */
+#themeToggle {
+  background: transparent;
+  border: 1px solid #444444;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#themeToggle:hover {
+  border-color: #4285f4;
+}
+
+/* ライトモード */
+body.light {
+  background-color: #f5f5f5;
+  color: #111111;
+}
+
+body.light .card,
+body.light .kpi-card,
+body.light .table-area {
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.light .kpi-label,
+body.light .card h2,
+body.light .table-area h2 {
+  color: #555555;
+}
+
+body.light .kpi-value {
+  color: #111111;
+}
+
+body.light #summaryTable tbody td {
+  color: #111111;
+}
+
+body.light #summaryTable thead th,
+body.light #summaryTable tbody td {
+  border-bottom: 1px solid #dddddd;
+}
+
+body.light #summaryTable tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+body.light .filter-btn {
+  border-color: #cccccc;
+  color: #555555;
+}
+
+body.light .filter-btn.active {
+  background-color: #4285f4;
+  border-color: #4285f4;
+  color: #ffffff;
+}
+
+/* 分析コメント */
+.chart-comment {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background-color: rgba(66, 133, 244, 0.1);
+  border-left: 3px solid #4285f4;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #aaaaaa;
+  line-height: 1.6;
+}
+
+/* ライトモード時のコメント */
+body.light .chart-comment {
+  color: #555555;
 }

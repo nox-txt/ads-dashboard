@@ -9,10 +9,13 @@
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
   </head>
   <body>
-    <!-- ヘッダー -->
     <header>
-      <h1>📊 Ads Performance Dashboard</h1>
-      <p>Global Ads Performance Data — Google / Meta / TikTok</p>
+      <div>
+        <h1>📊 Ads Performance Dashboard</h1>
+        <p>Global Ads Performance Data — Google / Meta / TikTok</p>
+      </div>
+      <!-- ダークモード切替ボタン -->
+      <button id="themeToggle">☀️</button>
     </header>
 
     <!-- ローディング表示 -->
@@ -41,23 +44,52 @@
       </div>
     </div>
 
+    <!-- フィルターエリア -->
+    <div class="filter-area">
+      <button class="filter-btn active" data-platform="all">全て</button>
+      <button class="filter-btn" data-platform="Google Ads">Google Ads</button>
+      <button class="filter-btn" data-platform="Meta Ads">Meta Ads</button>
+      <button class="filter-btn" data-platform="TikTok Ads">TikTok Ads</button>
+    </div>
+
+    <!-- データテーブルエリア -->
+    <div class="table-area">
+      <h2>プラットフォーム別 サマリー</h2>
+      <table id="summaryTable">
+        <thead>
+          <tr>
+            <th>プラットフォーム</th>
+            <th>総広告費</th>
+            <th>平均ROAS</th>
+            <th>総CV数</th>
+            <th>平均CPA</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
     <!-- グラフエリア -->
     <div class="grid">
       <div class="card">
         <h2>プラットフォーム別 平均ROAS</h2>
         <canvas id="roasChart"></canvas>
+        <p class="chart-comment" id="roasComment"></p>
       </div>
       <div class="card">
         <h2>月別 総広告費トレンド</h2>
         <canvas id="trendChart"></canvas>
+        <p class="chart-comment" id="trendComment"></p>
       </div>
       <div class="card">
         <h2>プラットフォーム別 広告費シェア</h2>
         <canvas id="shareChart"></canvas>
+        <p class="chart-comment" id="shareComment"></p>
       </div>
       <div class="card">
         <h2>キャンペーンタイプ別 平均ROAS</h2>
         <canvas id="campaignChart"></canvas>
+        <p class="chart-comment" id="campaignComment"></p>
       </div>
     </div>
 

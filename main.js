@@ -44,23 +44,35 @@ Papa.parse("global_ads_performance_dataset.csv", {
   header: true, // 1行目をカラム名として扱う
   dynamicTyping: true, // 数字は数字型として自動変換
   complete: function (results) {
-    // 空行を除外したデータを取得
-    const data = results.data.filter((row) => row.platform);
+    const allData = results.data.filter((row) => row.platform);
 
     // ローディングを非表示にする
     document.getElementById("loading").style.display = "none";
 
-    // 各グラフを描画
-    drawKpiCards(data);
-    drawRoasChart(data);
-    drawTrendChart(data);
-    drawShareChart(data);
-    drawCampaignChart(data);
-  },
-  error: function () {
-    // 読み込み失敗時のエラーメッセージを表示
-    document.getElementById("loading").innerHTML =
-      "<p>データの読み込みに失敗しました。</p>";
+    // 最初は全データで描画
+    renderAll(allData);
+
+    // フィルターボタンのクリック処理
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        // activeクラスを一旦全部外す
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        // クリックしたボタンにactiveクラスを付ける
+        this.classList.add("active");
+
+        // 選択したプラットフォームでデータを絞り込む
+        const platform = this.dataset.platform;
+        const filtered =
+          platform === "all"
+            ? allData
+            : allData.filter((row) => row.platform === platform);
+
+        // 絞り込んだデータで再描画
+        renderAll(filtered);
+      });
+    });
   },
 });
 
@@ -94,6 +106,9 @@ function drawRoasChart(data) {
       ],
     },
     options: {
+      maintainAspectRatio: true, // アスペクト比を維持
+      aspectRatio: 1.8, // 横：縦 = 1.8：1
+      // ...既存のオプション
       plugins: { legend: { display: false } }, // 凡例を非表示
       scales: {
         y: {
@@ -145,6 +160,9 @@ function drawTrendChart(data) {
       ],
     },
     options: {
+      maintainAspectRatio: true, // アスペクト比を維持
+      aspectRatio: 1.8, // 横：縦 = 1.8：1
+      // ...既存のオプション
       plugins: { legend: { display: false } },
       scales: {
         y: {
@@ -155,6 +173,9 @@ function drawTrendChart(data) {
         x: {
           grid: { display: false },
           ticks: { color: "#aaaaaa" },
+          maxRotation: 45, // ラベルを45度傾ける
+          minRotation: 45,
+          maxTicksLimit: 6, // 表示するラベルの数を減らす
         },
       },
       animation: { duration: 1000, easing: "easeOutQuart" },
@@ -191,6 +212,8 @@ function drawShareChart(data) {
       ],
     },
     options: {
+      maintainAspectRatio: true,
+      aspectRatio: 1.5, // 円グラフは少し縦長に
       plugins: {
         legend: { labels: { color: "#aaaaaa" } }, // 凡例の色
       },
@@ -234,6 +257,9 @@ function drawCampaignChart(data) {
       ],
     },
     options: {
+      maintainAspectRatio: true, // アスペクト比を維持
+      aspectRatio: 1.8, // 横：縦 = 1.8：1
+      // ...既存のオプション
       plugins: { legend: { display: false } },
       scales: {
         y: {
@@ -249,4 +275,205 @@ function drawCampaignChart(data) {
       animation: { duration: 1000, easing: "easeOutQuart" },
     },
   });
+}
+
+// 全グラフを再描画する関数
+function renderAll(data) {
+  drawKpiCards(data);
+  drawRoasChart(data);
+  drawTrendChart(data);
+  drawCampaignChart(data);
+  drawTable(data);
+  updateComments(data); // 分析コメントを更新
+
+  const shareCard = document.getElementById("shareChart").closest(".card");
+  const activePlatform =
+    document.querySelector(".filter-btn.active").dataset.platform;
+  if (activePlatform === "all") {
+    shareCard.style.display = "block";
+    drawShareChart(data);
+  } else {
+    shareCard.style.display = "none";
+  }
+}
+
+// ============================================
+// テーブルの描画
+// プラットフォーム別のサマリーを表形式で表示
+// ソート機能付き
+// ============================================
+function drawTable(data) {
+  const platforms = ["Google Ads", "Meta Ads", "TikTok Ads"];
+
+  // プラットフォームごとに集計したデータを作成
+  let tableData = platforms
+    .map((platform) => {
+      const filtered = data.filter((row) => row.platform === platform);
+      if (filtered.length === 0) return null;
+
+      return {
+        platform,
+        totalSpend: filtered.reduce((sum, row) => sum + row.ad_spend, 0),
+        avgRoas:
+          filtered.reduce((sum, row) => sum + row.ROAS, 0) / filtered.length,
+        totalCv: filtered.reduce((sum, row) => sum + row.conversions, 0),
+        avgCpa:
+          filtered.reduce((sum, row) => sum + row.CPA, 0) / filtered.length,
+      };
+    })
+    .filter(Boolean); // nullを除外
+
+  // 現在のソート状態を管理
+  let sortKey = null;
+  let sortAsc = true;
+
+  // テーブルを描画する内部関数
+  function renderTable() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+
+    // ソートが指定されている場合は並び替える
+    if (sortKey) {
+      tableData.sort((a, b) => {
+        return sortAsc ? a[sortKey] - b[sortKey] : b[sortKey] - a[sortKey];
+      });
+    }
+
+    // 行を生成
+    tableData.forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.platform}</td>
+        <td>$${(row.totalSpend / 1000).toFixed(0)}K</td>
+        <td>${row.avgRoas.toFixed(2)}</td>
+        <td>${row.totalCv.toLocaleString()}</td>
+        <td>$${row.avgCpa.toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ヘッダークリックでソート
+  const headers = document.querySelectorAll("#summaryTable thead th");
+  const keys = [null, "totalSpend", "avgRoas", "totalCv", "avgCpa"];
+
+  headers.forEach((th, i) => {
+    // 既存のイベントを削除してから追加（重複防止）
+    const newTh = th.cloneNode(true);
+    th.parentNode.replaceChild(newTh, th);
+
+    newTh.addEventListener("click", function () {
+      if (keys[i] === null) return; // プラットフォーム列はソート不可
+
+      // 同じ列をクリックした場合は昇順・降順を切り替える
+      if (sortKey === keys[i]) {
+        sortAsc = !sortAsc;
+      } else {
+        sortKey = keys[i];
+        sortAsc = true;
+      }
+
+      // ヘッダーのクラスを更新
+      document.querySelectorAll("#summaryTable thead th").forEach((h) => {
+        h.classList.remove("asc", "desc");
+      });
+      this.classList.add(sortAsc ? "asc" : "desc");
+
+      renderTable();
+    });
+  });
+
+  // 初期描画
+  renderTable();
+}
+
+// ============================================
+// ダークモード切替
+// ボタンクリックでlight/darkを切り替える
+// ============================================
+document.getElementById("themeToggle").addEventListener("click", function () {
+  const body = document.body;
+
+  if (body.classList.contains("light")) {
+    // ライトモード → ダークモードに切り替え
+    body.classList.remove("light");
+    this.textContent = "☀️";
+  } else {
+    // ダークモード → ライトモードに切り替え
+    body.classList.add("light");
+    this.textContent = "🌙";
+  }
+});
+// ============================================
+// 分析コメントの更新
+// データから自動でコメントを生成する
+// ============================================
+function updateComments(data) {
+  const platforms = ["Google Ads", "Meta Ads", "TikTok Ads"];
+
+  // プラットフォームごとの平均ROASを計算
+  const roasMap = {};
+  platforms.forEach((platform) => {
+    const filtered = data.filter((row) => row.platform === platform);
+    if (filtered.length === 0) return;
+    roasMap[platform] =
+      filtered.reduce((sum, row) => sum + row.ROAS, 0) / filtered.length;
+  });
+
+  // 最高ROASのプラットフォームを特定
+  const bestPlatform = Object.entries(roasMap).sort((a, b) => b[1] - a[1])[0];
+
+  // ROASグラフのコメント
+  if (bestPlatform) {
+    document.getElementById("roasComment").textContent =
+      `💡 ${bestPlatform[0]} のROASが ${bestPlatform[1].toFixed(2)} と最も高く、費用対効果が優秀です。`;
+  }
+
+  // トレンドグラフのコメント
+  const monthlyData = {};
+  data.forEach((row) => {
+    const month = row.date.substring(0, 7);
+    if (!monthlyData[month]) monthlyData[month] = 0;
+    monthlyData[month] += row.ad_spend;
+  });
+  const months = Object.keys(monthlyData).sort();
+  if (months.length >= 2) {
+    const first = monthlyData[months[0]];
+    const last = monthlyData[months[months.length - 1]];
+    const diff = (((last - first) / first) * 100).toFixed(1);
+    const trend = diff > 0 ? "増加" : "減少";
+    document.getElementById("trendComment").textContent =
+      `💡 期間全体で広告費は ${Math.abs(diff)}% ${trend}しています。`;
+  }
+
+  // 広告費シェアのコメント
+  const spendMap = {};
+  platforms.forEach((platform) => {
+    const filtered = data.filter((row) => row.platform === platform);
+    spendMap[platform] = filtered.reduce((sum, row) => sum + row.ad_spend, 0);
+  });
+  const totalSpend = Object.values(spendMap).reduce((a, b) => a + b, 0);
+  const topSpend = Object.entries(spendMap).sort((a, b) => b[1] - a[1])[0];
+  if (topSpend) {
+    const share = ((topSpend[1] / totalSpend) * 100).toFixed(1);
+    document.getElementById("shareComment").textContent =
+      `💡 ${topSpend[0]} が広告費全体の ${share}% を占めています。`;
+  }
+
+  // キャンペーンタイプのコメント
+  const campaignTypes = ["Search", "Display", "Shopping", "Video"];
+  const campaignRoas = {};
+  campaignTypes.forEach((type) => {
+    const filtered = data.filter((row) => row.campaign_type === type);
+    if (filtered.length === 0) return;
+    campaignRoas[type] =
+      filtered.reduce((sum, row) => sum + row.ROAS, 0) / filtered.length;
+  });
+  const bestCampaign = Object.entries(campaignRoas).sort(
+    (a, b) => b[1] - a[1],
+  )[0];
+  if (bestCampaign) {
+    document.getElementById("campaignComment").textContent =
+      `💡 ${bestCampaign[0]} がROAS ${bestCampaign[1].toFixed(2)} と最も効率的なキャンペーンタイプです。`;
+  }
 }
