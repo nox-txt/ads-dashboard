@@ -18,6 +18,16 @@
       <button id="themeToggle">☀️</button>
     </header>
 
+    <!-- CSVアップロードエリア -->
+    <div class="upload-area">
+      <label for="csvUpload">📂 CSVファイルをアップロード</label>
+      <input type="file" id="csvUpload" accept=".csv" />
+      <p class="upload-note">
+        ※ 対応カラム：date / platform / campaign_type / ad_spend / conversions /
+        ROAS / CPA
+      </p>
+    </div>
+
     <!-- ローディング表示 -->
     <div id="loading">
       <div class="spinner"></div>

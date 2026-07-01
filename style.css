@@ -315,3 +315,41 @@ body.light .filter-btn.active {
 body.light .chart-comment {
   color: #555555;
 }
+
+/* CSVアップロードエリア */
+.upload-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background-color: #1e2130;
+  border-radius: 12px;
+  border: 1px dashed #444444;
+}
+
+.upload-area label {
+  font-size: 14px;
+  color: #aaaaaa;
+  white-space: nowrap;
+}
+
+/* ファイル選択ボタン */
+#csvUpload {
+  font-size: 13px;
+  color: #aaaaaa;
+  cursor: pointer;
+}
+
+/* 注意書き */
+.upload-note {
+  font-size: 12px;
+  color: #666666;
+  white-space: nowrap;
+}
+
+/* ライトモード */
+body.light .upload-area {
+  background-color: #ffffff;
+  border-color: #cccccc;
+}

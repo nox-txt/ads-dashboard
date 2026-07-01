@@ -477,3 +477,50 @@ function updateComments(data) {
       `💡 ${bestCampaign[0]} がROAS ${bestCampaign[1].toFixed(2)} と最も効率的なキャンペーンタイプです。`;
   }
 }
+
+// ============================================
+// CSVアップロード処理
+// ユーザーが選択したCSVを読み込んでグラフを更新
+// ============================================
+document.getElementById("csvUpload").addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  Papa.parse(file, {
+    header: true, // 1行目をカラム名として扱う
+    dynamicTyping: true, // 数字は数字型として自動変換
+    complete: function (results) {
+      const data = results.data.filter((row) => row.platform);
+
+      // 必須カラムのチェック
+      const requiredColumns = [
+        "date",
+        "platform",
+        "ad_spend",
+        "conversions",
+        "ROAS",
+        "CPA",
+      ];
+      const columns = Object.keys(results.data[0] || {});
+      const missing = requiredColumns.filter((col) => !columns.includes(col));
+
+      if (missing.length > 0) {
+        // 必須カラムが足りない場合はエラーメッセージを表示
+        alert(`以下のカラムが見つかりません：${missing.join(", ")}`);
+        return;
+      }
+
+      // グラフを更新
+      renderAll(data);
+
+      // フィルターを「全て」にリセット
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+      document.querySelector('[data-platform="all"]').classList.add("active");
+    },
+    error: function () {
+      alert("CSVの読み込みに失敗しました。");
+    },
+  });
+});
