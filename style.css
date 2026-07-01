@@ -59,6 +59,101 @@ header p {
   letter-spacing: 0.05em;
 }
 
+/* 日別パフォーマンスカード（2列全幅） */
+.wide-card {
+  grid-column: 1 / -1;
+}
+
+/* 日付範囲フィルター */
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.date-range label {
+  font-size: 12px;
+  color: #aaaaaa;
+}
+
+.date-range input[type="date"] {
+  background: #2e3347;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.date-range input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
+.date-range span {
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.date-range button {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: transparent;
+  color: #aaaaaa;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.date-range button:hover {
+  border-color: #aaaaaa;
+  color: #ffffff;
+}
+
+body.light .date-range input[type="date"] {
+  background: #f0f0f0;
+  border-color: #cccccc;
+  color: #111111;
+}
+
+body.light .date-range input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+/* 日別タブ */
+.daily-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.daily-tab {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #444;
+  background: transparent;
+  color: #aaaaaa;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.4;
+}
+
+.daily-tab.active {
+  opacity: 1;
+}
+
+.daily-tab[data-index="0"].active { border-color: #4285F4; color: #4285F4; }
+.daily-tab[data-index="1"].active { border-color: #EA4335; color: #EA4335; }
+.daily-tab[data-index="2"].active { border-color: #34A853; color: #34A853; }
+.daily-tab[data-index="3"].active { border-color: #FBBC05; color: #FBBC05; }
+
+body.light .daily-tab { border-color: #cccccc; color: #666666; }
+
 /* KPIカードエリア */
 .kpi-grid {
   display: grid;
@@ -237,6 +332,54 @@ header p {
   content: " ↓";
 }
 
+/* テーブルの横スクロール */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* キャンペーン別パフォーマンステーブル */
+#campaignPerfTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+#campaignPerfTable thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  color: #aaaaaa;
+  border-bottom: 1px solid #2e3347;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#campaignPerfTable tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #ffffff;
+  border-bottom: 1px solid #2e3347;
+}
+
+#campaignPerfTable tbody tr:hover {
+  background-color: #2e3347;
+}
+
+body.light #campaignPerfTable thead th {
+  color: #666666;
+  border-bottom-color: #e0e0e0;
+}
+
+body.light #campaignPerfTable tbody td {
+  color: #111111;
+  border-bottom-color: #e0e0e0;
+}
+
+body.light #campaignPerfTable tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
 /* テーマ切替ボタン */
 #themeToggle {
   background: transparent;
@@ -299,6 +442,14 @@ body.light .filter-btn.active {
   color: #ffffff;
 }
 
+body.light header h1 {
+  color: #111111;
+}
+
+body.light header p {
+  color: #555555;
+}
+
 /* 分析コメント */
 .chart-comment {
   margin-top: 12px;
@@ -320,6 +471,7 @@ body.light .chart-comment {
 .upload-area {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 24px;
   padding: 16px 20px;
@@ -345,11 +497,140 @@ body.light .chart-comment {
 .upload-note {
   font-size: 12px;
   color: #666666;
-  white-space: nowrap;
 }
 
 /* ライトモード */
 body.light .upload-area {
   background-color: #ffffff;
   border-color: #cccccc;
+}
+
+/* マッピングエリア */
+.mapping-area {
+  background-color: #1e2130;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.mapping-area h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+/* マッピングのグリッド */
+.mapping-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+
+/* マッピングの行 */
+.mapping-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.currency-row {
+  grid-column: 1 / -1;
+}
+
+.currency-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.currency-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: transparent;
+  color: #aaaaaa;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.currency-btn.active {
+  border-color: #4285F4;
+  color: #4285F4;
+  background: rgba(66,133,244,0.1);
+}
+
+body.light .currency-btn { border-color: #cccccc; color: #666666; }
+body.light .currency-btn.active { border-color: #4285F4; color: #4285F4; }
+
+.mapping-row label {
+  font-size: 12px;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* セレクトボックス */
+.mapping-row select {
+  background-color: #0f1117;
+  border: 1px solid #444444;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.mapping-row select:hover {
+  border-color: #4285f4;
+}
+
+/* 反映ボタン */
+#applyMapping {
+  background-color: #4285f4;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+#applyMapping:hover {
+  background-color: #3574e2;
+}
+
+/* ライトモード */
+body.light .mapping-area {
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.light .mapping-row select {
+  background-color: #f5f5f5;
+  color: #111111;
+  border-color: #cccccc;
+}
+
+/* 必須・任意バッジ */
+.required {
+  font-size: 10px;
+  background-color: #ea4335;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.optional {
+  font-size: 10px;
+  background-color: #444444;
+  color: #aaaaaa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
 }

@@ -27,12 +27,65 @@
         ROAS / CPA
       </p>
     </div>
+    <!-- カラムマッピングエリア（初期は非表示） -->
+    <div class="mapping-area" id="mappingArea" style="display: none">
+      <h2>カラムのマッピング</h2>
+      <p class="upload-note">
+        ※ 広告費とCV数は必須です。他は任意です。ROAS・CPA・CVRは自動計算されます。
+      </p>
+      <div class="mapping-row currency-row">
+        <label>通貨記号</label>
+        <div class="currency-btns">
+          <button class="currency-btn active" data-currency="$">$ ドル</button>
+          <button class="currency-btn" data-currency="¥">¥ 円</button>
+          <button class="currency-btn" data-currency="">なし</button>
+        </div>
+      </div>
+      <div class="mapping-grid">
+        <div class="mapping-row">
+          <label>広告費 <span class="required">必須</span></label>
+          <select id="map-spend"></select>
+        </div>
+        <div class="mapping-row">
+          <label>CV数 <span class="required">必須</span></label>
+          <select id="map-conversions"></select>
+        </div>
+        <div class="mapping-row">
+          <label>プラットフォーム <span class="optional">任意</span></label>
+          <select id="map-platform"></select>
+        </div>
+        <div class="mapping-row">
+          <label>日付 <span class="optional">任意</span></label>
+          <select id="map-date"></select>
+        </div>
+        <div class="mapping-row">
+          <label>キャンペーンタイプ <span class="optional">任意</span></label>
+          <select id="map-campaign"></select>
+        </div>
+        <div class="mapping-row">
+          <label>売上金額 <span class="optional">任意</span></label>
+          <select id="map-revenue"></select>
+        </div>
+        <div class="mapping-row">
+          <label>表示回数 <span class="optional">任意</span></label>
+          <select id="map-impressions"></select>
+        </div>
+        <div class="mapping-row">
+          <label>クリック数 <span class="optional">任意</span></label>
+          <select id="map-clicks"></select>
+        </div>
+      </div>
+      <button id="applyMapping">グラフに反映する</button>
+    </div>
 
     <!-- ローディング表示 -->
     <div id="loading">
       <div class="spinner"></div>
       <p>データを読み込み中...</p>
     </div>
+
+    <!-- ダッシュボード本体（CSV読み込み後に表示） -->
+    <div id="dashboard">
 
     <!-- KPIカードエリア -->
     <div class="kpi-grid">
@@ -41,16 +94,16 @@
         <p class="kpi-value" id="totalSpend">-</p>
       </div>
       <div class="kpi-card">
-        <p class="kpi-label">平均ROAS</p>
-        <p class="kpi-value" id="avgRoas">-</p>
-      </div>
-      <div class="kpi-card">
         <p class="kpi-label">総CV数</p>
         <p class="kpi-value" id="totalConversions">-</p>
       </div>
       <div class="kpi-card">
         <p class="kpi-label">平均CPA</p>
         <p class="kpi-value" id="avgCpa">-</p>
+      </div>
+      <div class="kpi-card">
+        <p class="kpi-label">平均ROAS</p>
+        <p class="kpi-value" id="avgRoas">-</p>
       </div>
     </div>
 
@@ -70,9 +123,9 @@
           <tr>
             <th>プラットフォーム</th>
             <th>総広告費</th>
-            <th>平均ROAS</th>
             <th>総CV数</th>
             <th>平均CPA</th>
+            <th>平均ROAS</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -101,7 +154,56 @@
         <canvas id="campaignChart"></canvas>
         <p class="chart-comment" id="campaignComment"></p>
       </div>
+      <div class="card wide-card" id="campaignPerfCard" style="display:none">
+        <h2 id="campaignPerfTitle">キャンペーン別 パフォーマンス</h2>
+        <div class="date-range">
+          <label>期間</label>
+          <input type="date" id="campDateFrom" />
+          <span>〜</span>
+          <input type="date" id="campDateTo" />
+          <button id="campDateReset">リセット</button>
+        </div>
+        <div class="table-scroll">
+          <table id="campaignPerfTable">
+            <thead>
+              <tr>
+                <th>キャンペーンタイプ</th>
+                <th>広告費</th>
+                <th>CV数</th>
+                <th>CPA</th>
+                <th>表示回数</th>
+                <th>クリック数</th>
+                <th>CVR</th>
+                <th>収益</th>
+                <th>ROAS</th>
+              </tr>
+            </thead>
+            <tbody id="campaignPerfBody"></tbody>
+          </table>
+        </div>
+        <p class="chart-comment" id="campaignPerfComment"></p>
+      </div>
+      <div class="card wide-card" id="dailyCard" style="display:none">
+        <h2 id="dailyTitle">日別パフォーマンス推移</h2>
+        <div class="date-range">
+          <label>期間</label>
+          <input type="date" id="dateFrom" />
+          <span>〜</span>
+          <input type="date" id="dateTo" />
+          <button id="dateReset">リセット</button>
+        </div>
+        <div class="daily-tabs">
+          <button class="daily-tab active" data-index="0">広告費</button>
+          <button class="daily-tab active" data-index="1">CPA</button>
+          <button class="daily-tab active" data-index="2">CVR</button>
+          <button class="daily-tab active" data-index="3">ROAS</button>
+        </div>
+        <canvas id="dailyChart"></canvas>
+        <p class="chart-comment" id="dailyComment"></p>
+      </div>
     </div>
+
+    </div> <!-- #dashboard -->
 
     <script src="main.js"></script>
   </body>
